@@ -1,0 +1,55 @@
+.thumbnail-image{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.username{
+    font-size: 19px;
+    text-align: center;
+    margin: 0px;
+    padding: 0px;
+}
+.region{
+    font-size: 16px;
+    text-align: center;
+    margin: 4px;
+    font-weight: 600;
+}
+.join-button{
+    display: flex;
+    justify-content: center;
+}
+.padding{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.text-config{
+    color: rgb(87, 95, 116);
+    font-weight: 900;
+}
+.add-image-button{
+    display: flex;
+    justify-self: center;
+    width: 50%;
+    color: black;
+}
+.profile-container{
+    position: relative;
+}
+.camera-icon{
+    position: absolute;
+    font-size: 15px;
+    color: grey;
+}
+.camera-icon-container{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: rgb(207, 207, 207);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+}
