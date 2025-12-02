@@ -1,17 +1,17 @@
 <app-page-header [config]="headerConfig">
-  <!-- <ion-row class="header-bottom-border ion-padding">
+  <ion-row class="header-bottom-border ion-padding">
     <h3>
       {{'WELCOME'| translate}} {{ user?.name }}!
     </h3>
     <ion-col class="welcome-note" size="12">{{'WELCOME_NOTE' | translate}}</ion-col>
-    <ion-col size="6" class="ion-no-padding"> -->
+    <ion-col size="6" class="ion-no-padding"> 
       <!-- <p class="welcome-note hide-on-small-screen">{{'WELCOME_NOTE'| translate}}!</p> -->
       <div class="d-flex flex-justify-center my-8">
         <ion-searchbar class="search-bar" placeholder="{{'HOME_SEARCH_PLACEHOLDER' | translate}}" (click)="search()">
         </ion-searchbar>
       </div>
-    <!--</ion-col>
-  </ion-row> -->
+    </ion-col>
+  </ion-row> 
 </app-page-header>
 <ion-card *ngIf="showBecomeMentorCard" class="ion-padding card-config">
   <ion-card-header class="ion-no-padding d-flex flex-align-items-center flex-justify-space-between">
