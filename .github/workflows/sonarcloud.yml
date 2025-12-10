@@ -35,6 +35,14 @@ jobs:
       - name: Show coverage file path
         run: ls -la coverage || true
 
+      - name: Debug coverage folder
+        run: |
+          echo "=== Checking coverage folder ==="
+          ls -la coverage || echo "coverage folder not found"
+
+          echo "=== Searching for lcov.info ==="
+          find . -name "lcov.info" -print || echo "No lcov.info found"
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
