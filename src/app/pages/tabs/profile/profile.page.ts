@@ -141,9 +141,6 @@ public buttonConfig = {
       if(!data){
         this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
       }
-      if(!data){
-        this.router.navigate([`/${CommonRoutes.EDIT_PROFILE}`]);
-      }
     }).catch(error => {})
   }
   
