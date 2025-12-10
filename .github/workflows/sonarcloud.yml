@@ -5,7 +5,7 @@ on:
     branches: [main]
   pull_request:
     types: [opened, synchronize, reopened]
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,27 +25,45 @@ jobs:
         run: npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
       - name: Run tests and generate coverage
-        run: npx ng test --watch=false --code-coverage
-        # no continue-on-error here — allow failure so CI marks it
+        id: run-tests
+        # keep this step failing if tests fail so you see test status
+        run: |
+          # run tests and request coverage
+          npx ng test --watch=false --code-coverage
+        timeout-minutes: 15
 
       - name: Show coverage files
-        if: always()          # <-- run even if tests failed
+        if: always()                  # run even if tests failed
         run: |
-          echo "Listing coverage directory (exit code: $?)"
-          ls -la coverage || true
+          echo "Coverage directory listing (if exists):"
+          ls -la coverage || echo "no coverage directory"
+          # show lcov if present
+          if [ -f coverage/lcov.info ]; then
+            echo "lcov.info present at coverage/lcov.info"
+            head -n 5 coverage/lcov.info
+          else
+            echo "coverage/lcov.info not present"
+          fi
 
       - name: Upload coverage artifact
-        if: always()
+        if: always()                  # always upload so you can download later
         uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: coverage
 
-      
       - name: SonarCloud Scan
+        if: always()                  # <-- ensure this runs even when tests failed
         uses: SonarSource/sonarcloud-github-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # ensure this secret exists
         with:
           projectBaseDir: .
+          # pass scanner properties so Sonar uses the lcov if present
+          args: >
+            -Dsonar.sources=src
+            -Dsonar.tests=src
+            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+            -Dsonar.coverageReportPaths=coverage/lcov.info
