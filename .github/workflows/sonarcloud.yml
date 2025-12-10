@@ -1,19 +1,43 @@
-name: Build
+name: Build & Sonar
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
     types: [opened, synchronize, reopened]
+
 jobs:
-  sonarqube:
-    name: SonarQube
+  test-and-sonar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install Chrome (headless)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev chromium-browser
+
+      - name: Run tests & produce coverage
+        run: |
+          # ensure ChromeHeadless is available
+          npx ng test --watch=false --code-coverage --browsers=ChromeHeadless
+
+      - name: Show coverage file path
+        run: ls -la coverage || true
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # optionally pass extra sonar-scanner properties:
+          # SONAR_SCANNER_OPTS: -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
