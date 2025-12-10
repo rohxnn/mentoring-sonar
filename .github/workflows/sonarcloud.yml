@@ -53,17 +53,16 @@ jobs:
           path: coverage
 
       - name: SonarCloud Scan
-        if: always()                  # <-- ensure this runs even when tests failed
+        if: always()
         uses: SonarSource/sonarcloud-github-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # ensure this secret exists
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           projectBaseDir: .
-          # pass scanner properties so Sonar uses the lcov if present
           args: >
             -Dsonar.sources=src
             -Dsonar.tests=src
-            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-            -Dsonar.coverageReportPaths=coverage/lcov.info
+            -Dsonar.typescript.lcov.reportPaths=coverage/lcov.info
+
