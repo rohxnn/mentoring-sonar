@@ -26,9 +26,21 @@ jobs:
 
       - name: Run tests and generate coverage
         run: npx ng test --watch=false --code-coverage
+        # no continue-on-error here — allow failure so CI marks it
 
       - name: Show coverage files
-        run: ls -la coverage/
+        if: always()          # <-- run even if tests failed
+        run: |
+          echo "Listing coverage directory (exit code: $?)"
+          ls -la coverage || true
+
+      - name: Upload coverage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage
+
       
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v3
