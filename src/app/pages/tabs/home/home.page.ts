@@ -208,4 +208,5 @@ export class HomePage implements OnInit {
       this.userEventSubscription.unsubscribe();
     }
   }
+
 }
