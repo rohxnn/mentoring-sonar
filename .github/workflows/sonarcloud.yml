@@ -22,26 +22,9 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Install Chrome (headless)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgbm-dev chromium-browser
-
       - name: Run tests & produce coverage
         run: |
-          # ensure ChromeHeadless is available
           npx ng test --watch=false --code-coverage --browsers=ChromeHeadless || true
-
-      - name: Show coverage file path
-        run: ls -la coverage || true
-
-      - name: Debug coverage folder
-        run: |
-          echo "=== Checking coverage folder ==="
-          ls -la coverage || echo "coverage folder not found"
-
-          echo "=== Searching for lcov.info ==="
-          find . -name "lcov.info" -print || echo "No lcov.info found"
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
